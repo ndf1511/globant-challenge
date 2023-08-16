@@ -43,11 +43,19 @@ class EmployeesHiredByDepartmentAndJob(Resource):
                                format(**conf))
         df = pd.read_sql_query(open('hires_by_department_job.sql', 'r').read(), engine)
         return jsonpify(df.to_dict(orient='records'))
+    
+class HiresByDepartmentOverMean(Resource):
+    def get(self):
+        engine = create_engine("postgresql://{user}:{password}@{host}:{port}/{database}".
+                               format(**conf))
+        df = pd.read_sql_query(open('hires_by_department_over_mean.sql', 'r').read(), engine)
+        return jsonpify(df.to_dict(orient='records'))
 
 api.add_resource(Departments, '/departments') 
 api.add_resource(Employees, '/employees')
 api.add_resource(Jobs, '/jobs')
 api.add_resource(EmployeesHiredByDepartmentAndJob, '/hires_by_department_and_job')
+api.add_resource(HiresByDepartmentOverMean, '/hires_by_department_over_mean')
 
 if __name__ == '__main__':
     app.run(debug=True)
